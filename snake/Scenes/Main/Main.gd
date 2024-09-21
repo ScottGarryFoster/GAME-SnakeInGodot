@@ -8,6 +8,8 @@ extends Node
 @export_range(0, 100) var screenSizeX: int = 11
 @export_range(0, 100) var screenSizeY: int = 11
 @export_range(0, 100) var pieceSize: int = 40
+@export_range(-1280,1280) var screenOffsetX: int = 0
+@export_range(-1280,1280) var screenOffsetY: int = 0
 
 ## All directions
 enum directions {Left, Right, Up, Down}
@@ -18,10 +20,14 @@ var player = []
 ## Current player direction
 var playerDirection: directions
 
+## The player position in the game space not world space
+var playerPositionInGameSpace: Vector2i
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	playerPositionInGameSpace = Vector2i(screenSizeX / 2, screenSizeY / 2)
 	player.append(PlayerPieceScene.instantiate())
-	player[0].position = Vector2((screenSizeX / 2) * pieceSize, (screenSizeY / 2) * pieceSize)
+	UpdatePlayerPosition(playerPositionInGameSpace)
 	add_child(player[0])
 	
 	$MovementTimer.start()
@@ -36,6 +42,11 @@ func _process(delta: float) -> void:
 	pass
 	
 var doSpawn: bool
+
+func UpdatePlayerPosition(GamespacePosition: Vector2i):
+	player[0].position = Vector2(
+		screenOffsetX + (GamespacePosition.x * pieceSize), 
+		screenOffsetY + (GamespacePosition.y * pieceSize))
 
 func OnMovementTimerTimeout() -> void:
 	if doSpawn:
@@ -60,21 +71,23 @@ func UpdatePlayerDirectionFromPlayerInput():
 func MovePlayerInCurrentDirection():
 	match playerDirection:
 		directions.Up:
-			player[0].position.y -= pieceSize
-			if player[0].position.y < 0:
-				player[0].position.y = screenSizeY * pieceSize
+			playerPositionInGameSpace.y -= 1
+			if playerPositionInGameSpace.y < 0:
+				playerPositionInGameSpace.y = screenSizeY
 		directions.Down:
-			player[0].position.y += pieceSize
-			if player[0].position.y >= screenSizeY * pieceSize:
-				player[0].position.y = 0
+			playerPositionInGameSpace.y += 1
+			if playerPositionInGameSpace.y >= screenSizeY:
+				playerPositionInGameSpace.y = 0
 		directions.Left:
-			player[0].position.x -= pieceSize
-			if player[0].position.x < 0:
-				player[0].position.x = screenSizeX * pieceSize
+			playerPositionInGameSpace.x -= 1
+			if playerPositionInGameSpace.x < 0:
+				playerPositionInGameSpace.x = screenSizeX
 		directions.Right:
-			player[0].position.x += pieceSize
-			if player[0].position.x >= screenSizeX * pieceSize:
-				player[0].position.x = 0
+			playerPositionInGameSpace.x += 1
+			if playerPositionInGameSpace.x >= screenSizeX:
+				playerPositionInGameSpace.x = 0
+	
+	UpdatePlayerPosition(playerPositionInGameSpace)
 				
 func AddSnakePiece():
 	var newSnakeIndex = player.size()
