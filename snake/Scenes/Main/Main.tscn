@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://dj131unc72rfp"]
+
+[ext_resource type="Script" path="res://Scenes/Main/Main.gd" id="1_57jtx"]
+[ext_resource type="PackedScene" uid="uid://davncvu6sncb7" path="res://Scenes/PlayerPiece/PlayerPiece.tscn" id="2_pellv"]
+
+[node name="Main" type="Node"]
+script = ExtResource("1_57jtx")
+PlayerPieceScene = ExtResource("2_pellv")
+
+[node name="MovementTimer" type="Timer" parent="."]
+wait_time = 0.25
+
+[connection signal="timeout" from="MovementTimer" to="." method="OnMovementTimerTimeout"]
