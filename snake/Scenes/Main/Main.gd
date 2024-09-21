@@ -26,9 +26,16 @@ func _ready() -> void:
 	$MovementTimer.start()
 	pass # Replace with function body.
 
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	UpdatePlayerDirectionFromPlayerInput()
+	pass
+
+func OnMovementTimerTimeout() -> void:
+	MovePlayerInCurrentDirection()
+	pass # Replace with function body.
+	
+func UpdatePlayerDirectionFromPlayerInput():
 	if Input.is_action_pressed("MoveUp"):
 		playerDirection = directions.Up;
 	if Input.is_action_pressed("MoveLeft"):
@@ -37,20 +44,25 @@ func _process(delta: float) -> void:
 		playerDirection = directions.Down;
 	if Input.is_action_pressed("MoveRight"):
 		playerDirection = directions.Right;
-
 	pass
 
-
-func OnMovementTimerTimeout() -> void:
+func MovePlayerInCurrentDirection():
 	match playerDirection:
 		directions.Up:
 			playerPosition.y -= pieceSize
+			if playerPosition.y < 0:
+				playerPosition.y = screenSizeY * pieceSize
 		directions.Down:
 			playerPosition.y += pieceSize
+			if playerPosition.y >= screenSizeY * pieceSize:
+				playerPosition.y = 0
 		directions.Left:
 			playerPosition.x -= pieceSize
+			if playerPosition.x < 0:
+				playerPosition.x = screenSizeX * pieceSize
 		directions.Right:
 			playerPosition.x += pieceSize
-			
+			if playerPosition.x >= screenSizeX * pieceSize:
+				playerPosition.x = 0
+		
 	player.position = playerPosition
-	pass # Replace with function body.
