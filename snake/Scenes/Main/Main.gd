@@ -129,7 +129,7 @@ func MovePlayerInCurrentDirection():
 		directions.Up:
 			playerPositionInGameSpace.y -= 1
 			if playerPositionInGameSpace.y < 0:
-				playerPositionInGameSpace.y = screenSizeY
+				playerPositionInGameSpace.y = screenSizeY - 1
 		directions.Down:
 			playerPositionInGameSpace.y += 1
 			if playerPositionInGameSpace.y >= screenSizeY:
@@ -137,7 +137,7 @@ func MovePlayerInCurrentDirection():
 		directions.Left:
 			playerPositionInGameSpace.x -= 1
 			if playerPositionInGameSpace.x < 0:
-				playerPositionInGameSpace.x = screenSizeX
+				playerPositionInGameSpace.x = screenSizeX - 1
 		directions.Right:
 			playerPositionInGameSpace.x += 1
 			if playerPositionInGameSpace.x >= screenSizeX:

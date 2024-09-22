@@ -18,5 +18,17 @@ wait_time = 0.25
 
 [node name="UserInterface" parent="." instance=ExtResource("4_ciwas")]
 
+[node name="ColorRect2" type="ColorRect" parent="."]
+offset_right = 860.0
+offset_bottom = 554.0
+color = Color(0.188235, 0.384314, 0.188235, 1)
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_left = 10.0
+offset_top = 82.0
+offset_right = 850.0
+offset_bottom = 522.0
+color = Color(0.0588235, 0.219608, 0.0588235, 1)
+
 [connection signal="timeout" from="MovementTimer" to="." method="OnMovementTimerTimeout"]
 [connection signal="StartGame" from="UserInterface" to="." method="OnGameStartFromUserInterface"]
