@@ -86,13 +86,17 @@ func OnMovementTimerTimeout() -> void:
 	
 func UpdatePlayerDirectionFromPlayerInput():
 	if Input.is_action_pressed("MoveUp"):
-		playerDirection = directions.Up;
+		if playerDirection != directions.Down:
+			playerDirection = directions.Up;
 	if Input.is_action_pressed("MoveLeft"):
-		playerDirection = directions.Left;
+		if playerDirection != directions.Right:
+			playerDirection = directions.Left;
 	if Input.is_action_pressed("MoveDown"):
-		playerDirection = directions.Down;
+		if playerDirection != directions.Up:
+			playerDirection = directions.Down;
 	if Input.is_action_pressed("MoveRight"):
-		playerDirection = directions.Right;
+		if playerDirection != directions.Left:
+			playerDirection = directions.Right;
 	pass
 
 func MovePlayerInCurrentDirection():
