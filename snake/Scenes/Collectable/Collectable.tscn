@@ -5,7 +5,7 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_j13cw"]
 size = Vector2(36, 36)
 
-[node name="Collectable" type="Area2D" groups=["Collectable"]]
+[node name="Collectable" type="Area2D" groups=["Collectable", "LevelPieces"]]
 script = ExtResource("1_pi2un")
 
 [node name="ColorRect" type="ColorRect" parent="."]

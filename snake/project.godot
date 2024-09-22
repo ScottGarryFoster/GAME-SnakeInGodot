@@ -24,6 +24,10 @@ window/size/viewport_height=554
 
 project/assembly_name="Snake"
 
+[global_group]
+
+LevelPieces=""
+
 [input]
 
 MoveUp={

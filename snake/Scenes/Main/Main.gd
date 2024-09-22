@@ -43,8 +43,20 @@ var currentCollectable: Area2D
 ## Random number generator
 var random = RandomNumberGenerator.new()
 
+var doSpawnSnakePiece: bool
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	StartNewGame()
+	pass
+	
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	UpdatePlayerDirectionFromPlayerInput()
+
+	pass
+
+func StartNewGame():
 	playerPositionInGameSpace = Vector2i(screenSizeX / 2, screenSizeY / 2)
 	player.append(PlayerPieceScene.instantiate())
 	UpdatePlayerPosition(playerPositionInGameSpace)
@@ -52,23 +64,27 @@ func _ready() -> void:
 	
 	# Hook up the collectable
 	if player[0].has_signal("area_entered"):
-		player[0].connect("area_entered", Callable(self, "CollectedCollectable"))
+		player[0].connect("area_entered", Callable(self, "OnPlayerAreaEntered"))
 	
 	SpawnCollectable()
 	$MovementTimer.start()
 	
 	pass
-	
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	UpdatePlayerDirectionFromPlayerInput()
 
-	if Input.is_action_just_released("TestButton"):
-		doSpawn = true
-		
-	pass
+func GameOver():
+	# Hook up the collectable
+	if player[0].has_signal("area_entered"):
+		player[0].disconnect("area_entered", Callable(self, "OnPlayerAreaEntered"))
 	
-var doSpawn: bool
+	# Clear gameboard
+	get_tree().call_group("LevelPieces", "queue_free")
+	player.clear()
+	currentCollectable = null
+	
+	$MovementTimer.stop()
+	
+	StartNewGame()
+	pass
 
 func UpdatePlayerPosition(GamespacePosition: Vector2i):
 	player[0].position = Vector2(
@@ -76,9 +92,9 @@ func UpdatePlayerPosition(GamespacePosition: Vector2i):
 		screenOffsetY + (GamespacePosition.y * pieceSize))
 
 func OnMovementTimerTimeout() -> void:
-	if doSpawn:
+	if doSpawnSnakePiece:
 		AddSnakePiece()
-		doSpawn = false
+		doSpawnSnakePiece = false
 		
 	ShiftSnake()
 	MovePlayerInCurrentDirection()
@@ -134,11 +150,13 @@ func ShiftSnake():
 			player[i].position = player[i - 1].position
 	pass
 	
-func CollectedCollectable(body: Node2D) -> void:
+func OnPlayerAreaEntered(body: Node2D) -> void:
 	for group in body.get_groups():
 		if(group == "Collectable"):
-			doSpawn = true
+			doSpawnSnakePiece = true
 			SpawnCollectable()
+		elif(group == "Player"):
+			GameOver()
 	pass # Replace with function body.
 	
 func SpawnCollectable():

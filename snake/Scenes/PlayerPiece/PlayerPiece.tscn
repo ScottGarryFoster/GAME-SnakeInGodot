@@ -3,9 +3,9 @@
 [ext_resource type="Script" path="res://Scenes/PlayerPiece/PlayerPiece.gd" id="1_4gkoh"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_l2cg1"]
-size = Vector2(40, 40)
+size = Vector2(36, 36)
 
-[node name="PlayerPiece" type="Area2D"]
+[node name="PlayerPiece" type="Area2D" groups=["LevelPieces", "Player"]]
 script = ExtResource("1_4gkoh")
 
 [node name="ColorRect" type="ColorRect" parent="."]
