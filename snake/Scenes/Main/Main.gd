@@ -72,6 +72,7 @@ func StartNewGame():
 		player[0].connect("area_entered", Callable(self, "OnPlayerAreaEntered"))
 	
 	SpawnCollectable()
+	$MovementTimer.wait_time = 0.25
 	$MovementTimer.start()
 	
 	pass
@@ -162,12 +163,26 @@ func ShiftSnake():
 func OnPlayerAreaEntered(body: Node2D) -> void:
 	for group in body.get_groups():
 		if(group == "Collectable"):
-			doSpawnSnakePiece = true
-			UpdateScore(currentScore + 1)
-			SpawnCollectable()
+			CollectCollectable()
 		elif(group == "Player"):
 			GameOver()
 	pass # Replace with function body.
+	
+func CollectCollectable():
+	# Speed up Snake
+	var newSpeedMultiplier = (1.0 - (currentScore / 100.0))
+	var newSpeed = newSpeedMultiplier * 0.25
+	if(newSpeed > 0.15):
+		$MovementTimer.wait_time = 0.15
+	else:
+		$MovementTimer.wait_time = newSpeed
+	
+	# Grow snake
+	doSpawnSnakePiece = true
+	
+	UpdateScore(currentScore + 1)
+	SpawnCollectable()
+	pass
 	
 func SpawnCollectable():
 	if(currentCollectable == null):
