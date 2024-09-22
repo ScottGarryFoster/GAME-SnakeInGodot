@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://cccwvfus48y24"]
+
+[ext_resource type="Script" path="res://Scenes/Collectable/Collectable.gd" id="1_pi2un"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_j13cw"]
+size = Vector2(36, 36)
+
+[node name="Collectable" type="Area2D" groups=["Collectable"]]
+script = ExtResource("1_pi2un")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+color = Color(0.188235, 0.384314, 0.188235, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(20, 20)
+shape = SubResource("RectangleShape2D_j13cw")
