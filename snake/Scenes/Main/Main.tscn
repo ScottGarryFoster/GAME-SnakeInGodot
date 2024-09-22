@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://dj131unc72rfp"]
+[gd_scene load_steps=5 format=3 uid="uid://dj131unc72rfp"]
 
 [ext_resource type="Script" path="res://Scenes/Main/Main.gd" id="1_57jtx"]
 [ext_resource type="PackedScene" uid="uid://davncvu6sncb7" path="res://Scenes/PlayerPiece/PlayerPiece.tscn" id="2_pellv"]
 [ext_resource type="PackedScene" uid="uid://cccwvfus48y24" path="res://Scenes/Collectable/Collectable.tscn" id="3_d4hft"]
+[ext_resource type="PackedScene" uid="uid://d0qb712jd86dt" path="res://Scenes/UserInterface/UserInterface.tscn" id="4_ciwas"]
 
 [node name="Main" type="Node"]
 script = ExtResource("1_57jtx")
@@ -15,4 +16,7 @@ screenOffsetY = 82
 [node name="MovementTimer" type="Timer" parent="."]
 wait_time = 0.25
 
+[node name="UserInterface" parent="." instance=ExtResource("4_ciwas")]
+
 [connection signal="timeout" from="MovementTimer" to="." method="OnMovementTimerTimeout"]
+[connection signal="StartGame" from="UserInterface" to="." method="OnGameStartFromUserInterface"]

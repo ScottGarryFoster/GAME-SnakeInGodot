@@ -43,11 +43,15 @@ var currentCollectable: Area2D
 ## Random number generator
 var random = RandomNumberGenerator.new()
 
+## True means next movement a new snake piece will spawn
 var doSpawnSnakePiece: bool
+
+## Current score
+var currentScore: int = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	StartNewGame()
+	UpdateScore(0)
 	pass
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -61,6 +65,7 @@ func StartNewGame():
 	player.append(PlayerPieceScene.instantiate())
 	UpdatePlayerPosition(playerPositionInGameSpace)
 	add_child(player[0])
+	UpdateScore(0)
 	
 	# Hook up the collectable
 	if player[0].has_signal("area_entered"):
@@ -83,8 +88,12 @@ func GameOver():
 	
 	$MovementTimer.stop()
 	
-	StartNewGame()
+	$UserInterface.AllowGameToStart()
 	pass
+
+func UpdateScore(newScore: int):
+	currentScore = newScore
+	$UserInterface.SetScore(currentScore)
 
 func UpdatePlayerPosition(GamespacePosition: Vector2i):
 	player[0].position = Vector2(
@@ -154,6 +163,7 @@ func OnPlayerAreaEntered(body: Node2D) -> void:
 	for group in body.get_groups():
 		if(group == "Collectable"):
 			doSpawnSnakePiece = true
+			UpdateScore(currentScore + 1)
 			SpawnCollectable()
 		elif(group == "Player"):
 			GameOver()
@@ -186,3 +196,8 @@ func SpawnCollectable():
 		screenOffsetX + (randomX * pieceSize),
 		 screenOffsetY + (randomY * pieceSize))
 	pass
+
+
+func OnGameStartFromUserInterface() -> void:
+	StartNewGame()
+	pass # Replace with function body.
